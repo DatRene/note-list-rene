@@ -1,5 +1,5 @@
 function getLocal() {
-  var notes = localStorage.getItem('NoteList');
+  var notes = localStorage.getItem('noteList');
 
   if(notes != null) {
       return JSON.parse(notes);
