@@ -18,10 +18,26 @@ function setLocal(inputText, inputDate, inputImportant, inputIcon) {
     icon:       inputIcon
   };
   origNotes.push(newNote);
-
   var newNotes = JSON.stringify(origNotes);
 
-  localStorage.setItem('notes', newNotes);
+  localStorage.setItem('noteList', newNotes);
 }
 
-setLocal('Cry', '2018/03/07 10:30:01', true, 'tint');
+setLocal('Cry', '2018-04-03 11:11:11', true, 'empire');
+
+window.onload = function() {
+  var notes = getLocal();
+
+  var ulElm = document.querySelector('ul');
+
+  for(var i = 0; i < notes.length; i++) {
+    var liElm = document.createElement('li');
+    var pElm = document.createElement('p');
+
+    pElm.innerHTML = notes[i].text;
+
+    liElm.appendChild(pElm);
+
+    ulElm.appendChild(liElm);
+  }
+}
