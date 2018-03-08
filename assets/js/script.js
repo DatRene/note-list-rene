@@ -9,7 +9,12 @@ function getLocal() {
   }
 }
 
-function setLocal(inputText, inputDate, inputImportant, inputIcon) {
+function setLocal(origNotes) {
+  var newNotes = JSON.stringify(origNotes);
+  localStorage.setItem('noteList', newNotes);
+}
+
+function submitNote(inputText, inputDate, inputImportant, inputIcon) {
   var origNotes = getLocal();
   var newNote = {
     text:       inputText,
@@ -18,26 +23,57 @@ function setLocal(inputText, inputDate, inputImportant, inputIcon) {
     icon:       inputIcon
   };
   origNotes.push(newNote);
-  var newNotes = JSON.stringify(origNotes);
 
-  localStorage.setItem('noteList', newNotes);
+  setLocal(origNotes);
 }
 
-setLocal('Cry', '2018-04-03 11:11:11', true, 'empire');
+//setLocal('Cry', '2018-04-03 11:11:11', true, 'empire');
 
-window.onload = function() {
+function buildList() {
   var notes = getLocal();
 
   var ulElm = document.querySelector('ul');
+  ulElm.innerHTML = '';
 
   for(var i = 0; i < notes.length; i++) {
     var liElm = document.createElement('li');
     var pElm = document.createElement('p');
 
+    if(notes[i].important === true) {
+      liElm.style.backgroundColor = 'deeppink';
+      liElm.style.color = 'white';
+    }
+
     pElm.innerHTML = notes[i].text;
+    pElm.classList.add('pinkUnicorn');
 
     liElm.appendChild(pElm);
+
+    if(notes[i].date !== '') {
+      var pDateElm = document.createElement('p');
+      pDateElm.innerHTML = notes[i].date;
+      liElm.appendChild(pDateElm);
+    }
 
     ulElm.appendChild(liElm);
   }
 }
+
+window.onload = function() {
+  buildList();
+}
+
+var submitBtn = document.querySelector('#addNote');
+
+submitBtn.addEventListener('click', function() {
+  var text = document.querySelector('#noteText');
+  var important = document.querySelector('#noteImportant');
+  var date = document.querySelector('#noteTime');
+
+  submitNote(text.value, date.value, important.checked, 'empire');
+  buildList();
+
+  text.value = '';
+  date.value = '';
+  important.checked = false;
+})

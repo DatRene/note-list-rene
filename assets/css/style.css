@@ -20,4 +20,5 @@ body {
 
 ul {
   flex: 1;
+  overflow: auto;
 }
