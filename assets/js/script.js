@@ -38,6 +38,8 @@ function buildList() {
   for(var i = 0; i < notes.length; i++) {
     var liElm = document.createElement('li');
     var pElm = document.createElement('p');
+    var delBtn = document.createElement('button');
+    var btnText = document.createTextNode('Edit');
 
     if(notes[i].important === true) {
       liElm.style.backgroundColor = 'deeppink';
@@ -46,8 +48,22 @@ function buildList() {
 
     pElm.innerHTML = notes[i].text;
     pElm.classList.add('pinkUnicorn');
+    pElm.setAttribute('data-index', i);
+
+    pElm.addEventListener('click', function(event) {
+      var index = event.target.getAttribute('data-index')
+      var notes = getLocal();
+      console.log(notes[index]);
+      notes[index].text = "Changed";
+      var inputTemp = document.querySelector('#noteText');
+      inputTemp.value = 'whatever';
+      setLocal(notes);
+      buildList();
+    });
 
     liElm.appendChild(pElm);
+    liElm.appendChild(delBtn);
+    delBtn.appendChild(btnText);
 
     if(notes[i].date !== '') {
       var pDateElm = document.createElement('p');
